@@ -1,0 +1,6 @@
+.nuxt
+config.js
+dist
+node_modules
+package-lock.json
+pm2.ecosystem.json

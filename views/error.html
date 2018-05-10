@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><%= messages.server_error %></title>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name=viewport>
+</head>
+<body>
+  <div class="error"> <!-- TODO figure out this formatting -->
+    <div class="title"><%= messages.server_error %></div>
+    <div class="description"><% if (debug) { %>{{ message }}<% } else { %><%= messages.server_error_details %><% } %></div>
+  </div>
+</body>
+</html>
