@@ -51,9 +51,33 @@
           <b-field :type="isInvalidTagline ? 'is-danger' : ''" :message="isInvalidTagline" label="Tagline">
             <b-input v-model="tagline" minlength="8" maxlength="200" placeholder="A short description of your bot" required @blur="validateTagline" @input="validateTagline"/>
           </b-field>
-          <b-field :type="isInvalidDescription ? 'is-danger' : ''" :message="isInvalidDescription" label="Description">
-            <b-input v-model="description" type="textarea" minlength="32" maxlength="16000" placeholder="Now describe the bot! Go into detail!" required @blur="validateDescription" @input="validateDescription"/>
-          </b-field>
+          <div class="columns">
+            <div class="column">
+              <b-field :type="isInvalidDescription ? 'is-danger' : ''" :message="isInvalidDescription" label="Description">
+                <b-input v-model="description" type="textarea" minlength="32" maxlength="16000" placeholder="Now describe the bot! Go into detail!" required @blur="validateDescription" @input="validateDescription"/>
+              </b-field>
+              <div class="buttons">
+                <b-checkbox v-model="previewColumnActive" class="button is-text">Preview</b-checkbox>
+                <a v-if="description && tagline && owners.length" class="button is-text" href="#" @click="previewModalActive = true">Full Preview</a>
+                <a v-else class="button is-text" href="#" disabled @click.prevent>Full Preview</a>
+                <b-modal :active.sync="previewModalActive" :has-modal-card="true" class="preview-modal" >
+                  <div class="modal-card description-preview">
+                    <header class="modal-card-head">
+                      <p class="modal-card-title">Preview</p>
+                    </header>
+                    <section class="modal-card-body">
+                      <navbar />
+                      <bot-view :bot="bot" :is-preview="true"/>
+                    </section>
+                  </div>
+                </b-modal>
+              </div>
+            </div>
+            <div v-if="previewColumnActive" class="column">
+              <label class="label">Preview</label>
+              <div v-html="description"/>
+            </div>
+          </div>
           <b-notification :active.sync="notifyError" type="is-danger" v-html="notifyErrorMessage"/>
           <b-field grouped>
             <p class="control">
@@ -105,6 +129,8 @@
 
 <script>
 import DiscordIcon from "~/components/DiscordIcon.vue"
+import Navbar from "~/components/Navbar.vue";
+import BotView from "~/components/BotView.vue";
 
 const VALID_CATEGORIES = ["anime", "fun", "games", "moderation", "music", "nsfw", "utility"];
 const VALID_LIBRARIES = ["Discord.Net", "discord.js", "Eris", "discord.py", "Custom Library"];
@@ -125,7 +151,9 @@ function createDebouncer() {
 
 export default {
   components: {
-    DiscordIcon
+    DiscordIcon,
+    Navbar,
+    BotView
   },
   middleware: ["authenticated", "betaOnly"],
   data() {
@@ -174,7 +202,10 @@ export default {
       submitted: false,
 
       notifyError: false,
-      notifyErrorMessage: ""
+      notifyErrorMessage: "",
+
+      previewColumnActive: false,
+      previewModalActive: false
     };
   },
   computed: {
@@ -196,6 +227,20 @@ export default {
     },
     isInvalidAny() {
       return !!(this.isInvalidClientID || this.isInvalidLibrary || this.isInvalidWebsite || this.isInvalidPrefixes || this.isInvalidOwners || this.isInvalidCategories || this.isInvalidTagline || this.isInvalidDescription || this.isInvalidPermissions || this.isInvalidInviteScopes || this.isInvalidRedirectURI);
+    },
+    sanitizedDescription() {
+      // TODO: actually implement
+      return this.description;
+    },
+    bot() {
+      return {
+        id: "0",
+        name: "Preview",
+        website: this.website,
+        tagline: this.tagline,
+        description: this.sanitizedDescription,
+        owners: this.owners.map(o => o.tag).join(", ")
+      };
     }
   },
   mounted() {
@@ -534,5 +579,19 @@ export default {
 <style>
 .long-link {
   word-wrap: break-word;
+}
+.description-preview {
+  width: 100%;
+  position: relative;
+}
+.preview-modal > .animation-content {
+  width: 100%
+}
+.bot-container {
+  padding-top: 1em;
+  width: 100%;
+}
+.bot-owners {
+  margin-left: .5em;
 }
 </style>
