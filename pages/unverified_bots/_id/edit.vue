@@ -5,7 +5,8 @@
         <h1 class="title">
           Edit a Bot
         </h1>
-        <bot-form :edit="true" v-bind:old-bot="bot" :unverified="true"/>
+        <bot-form :edit="true" :old-bot="bot" :unverified="true"/>
+        {{ bot }}
       </div>
     </section>
   </div>

@@ -3,7 +3,8 @@
     <form>
       <b-field grouped>
         <b-field :type="isInvalidClientID ? 'is-danger' : ''" :message="isInvalidClientID" label="Client ID" expanded>
-          <b-input v-model="clientID" minlength="18" required @input="validateClientID" @blur="validateClientID"/>
+          <b-input v-if="edit" v-model="clientID" minlength="18" disabled required @input="validateClientID" @blur="validateClientID"/>
+          <b-input v-else v-model="clientID" minlength="18" required @input="validateClientID" @blur="validateClientID"/>
         </b-field>
         <b-field :type="isInvalidLibrary ? 'is-danger' : ''" :message="isInvalidLibrary" label="Library">
           <b-select v-model="library" placeholder="Select a library:" required @input="validateLibrary" @blur="validateLibrary">
@@ -275,13 +276,16 @@ export default {
         window.localStorage.removeItem("botFormDraft");
       }
     } else {
-      
+      this.populateData(this.oldBot);
     }
   },
   methods: {
     populateData(data = {}) {
       if(data.clientID) {
         this.clientID = data.clientID;
+      }
+      if(data.id) {
+        this.clientID = data.id;
       }
       if(data.library) {
         this.library = data.library;
@@ -293,7 +297,12 @@ export default {
         this.prefixes = data.prefixes;
       }
       if(data.owners) {
-        this.owners = data.owners;
+        // populate the tag property if undefined (edits)
+        this.owners = data.owners.map((owner) => {
+          if (!owner.tag)
+            owner.tag = `${owner.username}#${owner.discriminator}`;
+          return owner;
+        });
       }
       if(data.categories) {
         this.categories = data.categories;
