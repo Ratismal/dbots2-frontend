@@ -121,10 +121,7 @@
 </template>
 
 <script>
-import DiscordIcon from "~/components/DiscordIcon.vue"
-import Navbar from "~/components/Navbar.vue";
 import BotView from "~/components/BotView.vue";
-import BotForm from "~/components/BotForm.vue";
 
 const VALID_CATEGORIES = ["anime", "fun", "games", "moderation", "music", "nsfw", "utility"];
 const VALID_LIBRARIES = ["Discord.Net", "discord.js", "Eris", "discord.py", "Custom Library"];
@@ -144,7 +141,7 @@ function createDebouncer() {
 }
 
 export default {
-  components: {},
+  components: { BotView },
   middleware: ["authenticated", "betaOnly"],
   props: {
     edit: { // Signifies that it's an "edit bot" form
