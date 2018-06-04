@@ -121,7 +121,6 @@
 </template>
 
 <script>
-import DiscordIcon from "~/components/DiscordIcon.vue"
 import Navbar from "~/components/Navbar.vue";
 import BotView from "~/components/BotView.vue";
 
