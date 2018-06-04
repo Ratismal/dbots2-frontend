@@ -61,7 +61,7 @@
                   <p class="modal-card-title">Preview</p>
                 </header>
                 <section class="modal-card-body">
-                  <navbar />
+                  <nav-bar />
                   <bot-view :bot="bot" :is-preview="true"/>
                 </section>
               </div>
@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import DiscordIcon from "~/components/DiscordIcon.vue"
+import Navbar from "~/components/Navbar.vue";
 import BotView from "~/components/BotView.vue";
 
 const VALID_CATEGORIES = ["anime", "fun", "games", "moderation", "music", "nsfw", "utility"];
@@ -141,7 +143,7 @@ function createDebouncer() {
 }
 
 export default {
-  components: { BotView },
+  components: { BotView, NavBar: Navbar },
   middleware: ["authenticated", "betaOnly"],
   props: {
     edit: { // Signifies that it's an "edit bot" form
