@@ -6,7 +6,6 @@
           Edit a Bot
         </h1>
         <bot-form :edit="true" :old-bot="bot" :unverified="true"/>
-        {{ bot }}
       </div>
     </section>
   </div>
@@ -30,9 +29,6 @@ export default {
       }
     }).then((bot) => {
       let owners = "";
-      if(bot.owners) {
-        owners = bot.owners.map((owner) => owner.id);
-      }
 
       return { id: ctx.params.id, bot };
     }).catch((err) => {
