@@ -263,7 +263,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.asdasd, this.clientID);
     if (!this.edit) {
       try {
         let botFormDraft = window.localStorage.getItem("botFormDraft");
