@@ -254,10 +254,10 @@ export default {
       };
     },
     endpoint() {
-      if (!this.edit || this.unverified)
-        return "/unverified_bots";
-
-      return "/bots"
+      let endpoint = (!this.edit || this.unverified) ? "/unverified_bots" : "/bots"
+      if (this.edit)
+        endpoint += "/" + this.clientID
+      return endpoint
     }
   },
   mounted() {
@@ -563,7 +563,7 @@ export default {
       if(this.inviteCodeGrant) {
         flags |= 0b1; // Kenobi
       }
-      this.$axios.$post(this.endpoint, {
+      this.$axios[this.edit ? "$patch" : "$post"](this.endpoint, {
         id: this.clientID,
         categories: this.categories,
         flags: flags,
