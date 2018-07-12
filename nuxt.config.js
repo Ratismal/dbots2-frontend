@@ -13,6 +13,9 @@ module.exports = {
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }
     ]
   },
+  css: [
+    "~/assets/scss/dark.scss"
+  ],
   /*
   ** Customize the progress bar color
   */
@@ -48,7 +51,8 @@ module.exports = {
     }]
   ],
   plugins: [
-    "~/plugins/auth"
+    "~/plugins/auth",
+    {src: "~/plugins/localStorage", ssr: false} // Used to store various parts of Vuex in localStorage.
   ],
   proxy: {
     "/api/": process.env.DBOTS2_API_ORIGIN || "https://bots-beta.discord.pw"

@@ -19,13 +19,13 @@
             </div>
             <nav class="level is-mobile">
               <div class="level-left">
-                <router-link v-if="!isPreview" :to="`/bots/${bot.id}/invite`" class="level-item">
+                <router-link v-if="!isPreview" :to="`/bots/${bot.id}/invite`" class="level-item dark-link">
                   <span>Invite</span>
                 </router-link>
-                <a v-else href="#" class="level-item">
+                <a v-else href="#" class="level-item dark-link">
                   <span>Invite</span>
                 </a>
-                <a v-if="!!bot.website" :href="bot.website" target="_blank" rel="noopener" class="level-item">
+                <a v-if="!!bot.website" :href="bot.website" target="_blank" rel="noopener" class="level-item dark-link">
                   <span>Website</span>
                 </a>
               </div>
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <div v-html="bot.description"/>
+      <div class="bot-description" v-html="bot.description"/>
     </div>
     <b-modal v-if="canModify && !isPreview" :can-cancel="['escape', 'outside']" :active.sync="deleteModalActive" has-modal-card>
       <div class="modal-card animation-content">

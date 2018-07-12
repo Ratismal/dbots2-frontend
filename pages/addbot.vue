@@ -75,7 +75,7 @@
             </div>
             <div v-if="previewColumnActive" class="column">
               <label class="label">Preview</label>
-              <div v-html="description"/>
+              <div class="bot-description" v-html="description"/>
             </div>
           </div>
           <b-notification :active.sync="notifyError" type="is-danger" v-html="notifyErrorMessage"/>
