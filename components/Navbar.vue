@@ -47,6 +47,7 @@
 
             <div class="navbar-dropdown">
               <router-link class="navbar-item" to="/profile">Profile</router-link>
+              <b-switch v-model="lightTheme" class="navbar-item" @click.native="setLightTheme">Light Theme</b-switch>
               <router-link class="navbar-item" to="/logout">Logout</router-link>
             </div>
           </div>
@@ -60,7 +61,7 @@
 </template>
 
 <script>
-import DiscordIcon from "~/components/DiscordIcon.vue"
+import DiscordIcon from "~/components/DiscordIcon.vue";
 
 export default {
   components: {
@@ -68,7 +69,8 @@ export default {
   },
   data() {
     return {
-      navbarActive: false
+      navbarActive: false,
+      lightTheme: this.$store.state.userOptions.lightTheme
     };
   },
   computed: {
@@ -80,6 +82,14 @@ export default {
     $route() {
       this.navbarActive = false;
     }
+  },
+  methods: {
+    setLightTheme() {
+      this.lightTheme = !this.lightTheme;
+
+      if (this.lightTheme) this.$store.commit("userOptions/enableLightTheme");
+      else this.$store.commit("userOptions/disableLightTheme");
+    }
   }
 }
 </script>
@@ -90,5 +100,8 @@ export default {
 }
 .navbar-end .icon img {
   margin-right: .5em;
+}
+.switch.navbar-item {
+  width: 100%;
 }
 </style>

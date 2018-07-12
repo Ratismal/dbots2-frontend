@@ -1,0 +1,262 @@
+@import "~bulma/sass/utilities/_all";
+
+$purple: #7957D5;
+$primary: $purple;
+$primary-invert: findColorInvert($primary);
+
+$colors: (
+  "white": ($white, $black),
+  "black": ($black, $white),
+  "light": ($light, $light-invert),
+  "dark": ($dark, $dark-invert),
+  "primary": ($primary, $primary-invert),
+  "info": ($info, $info-invert),
+  "success": ($success, $success-invert),
+  "warning": ($warning, $warning-invert),
+  "danger": ($danger, $danger-invert)
+);
+
+@mixin fadeTransition($props) {
+  $full: "";
+  $time: 0.2s;
+  $ease: ease-out;
+
+  @each $prop in $props {
+    $full: "#{$full}#{$prop} #{$time} #{$ease},";
+  }
+
+  transition: #{str-slice($full, 0, -2)};
+}
+html,
+hr,
+.input,
+.textarea,
+.select select,
+.tag,
+.taginput .tag,
+.button,
+.card,
+.modal-card-head,
+.modal-card-body,
+.modal-card-foot,
+.box,
+.navbar-dropdown,
+.navbar-item,
+.dropdown-content,
+code,
+.title,
+.subtitle,
+p,
+.input::placeholder,
+.textarea::placeholder,
+select > option,
+.label,
+.card-footer-item,
+.dark-link,
+.bot-description,
+.checkbox,
+.select::after,
+.card-footer {
+  @include fadeTransition(background-color color border-color);
+  // @include fadeTransition(color);
+  // @include fadeTransition(border-color);
+}
+
+.dark {
+  background-color: $black-bis;
+
+  & .title {
+    color: $white-ter;
+  }
+
+  & .subtitle {
+    color: $grey-lighter;
+  }
+
+  & hr {
+    background-color: $grey-light;
+  }
+
+  & p {
+    color: $white-ter;
+  }
+
+  & .input,
+  & .textarea,
+  & .select select {
+    background-color: $grey-darker;
+    color: $grey-lighter;
+    border-color: transparent;
+
+    &:hover {
+      border-color: transparent;
+    }
+
+    &:focus {
+      border-color: #3273DC;
+    }
+
+    @each $key, $val in $colors {
+      $true-val: nth($val, 1);
+
+      &.is-#{$key},
+      &.is-#{$key}:hover {
+        border-color: $true-val;
+      }
+    }
+
+    &:disabled {
+      background-color: $black-ter;
+      border-color: transparent !important;
+    }
+  }
+
+  & .input::placeholder,
+  & .textarea::placeholder {
+      color: rgba($grey-lighter, 0.3);
+  }
+
+  & .select {
+    &:not(.is-multiple)::after,
+    &:hover::after {
+      border-color: $white-ter;
+    }
+    & select > option {
+      color: $white-ter;
+    }
+  }
+
+  & .tag {
+    background-color: $grey-darker;
+    color: $grey-lighter;
+  }
+
+  & .taginput .tag {
+    background-color: $black-ter;
+  }
+
+  & .label {
+    color: $grey-lighter;
+  }
+
+  & .button {
+    background-color: $grey-darker;
+    color: $grey-lighter;
+    border-color: transparent;
+
+    &:hover {
+      border-color: $black;
+      color: $grey-light;
+      border-color: transparent;
+    }
+
+    &:active,
+    &:focus {
+      color: $grey;
+    }
+
+    &.is-text {
+      color: $white-ter;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: $grey-darker;
+        color: $white;
+      }
+    }
+  }
+
+  & .card {
+    background-color: $grey-darker;
+    color: $text-invert;
+
+    & .card-footer,
+    & .card-footer-item:not(:last-child) {
+      border-color: $grey-dark;
+    }
+
+    & a.card-footer-item {
+      color: $white !important;
+      text-decoration: underline;
+    }
+  }
+
+  & .modal-card {
+    & .modal-card-head {
+      background-color: $black-ter;
+      border-bottom-color: $grey-darker;
+    }
+
+    & .modal-card-body {
+      background-color: $black-bis;
+    }
+
+    & .modal-card-foot {
+      background-color: $black-ter;
+      border-top-color: $grey-darker;
+    }
+  }
+
+  & .box {
+    background-color: $black-ter;
+  }
+
+  & .navbar-dropdown {
+    background-color: $grey-darker;
+    border-color: $grey-darker;
+
+    & .navbar-item {
+      color: $grey-lighter;
+
+      &:hover {
+        color: $white-ter;
+        background-color: $grey;
+      }
+    }
+  }
+
+  .dropdown-content {
+    background-color: $grey-darker;
+
+    & .dropdown-item {
+      color: $grey-lighter;
+
+      &:hover,
+      &.is-hovered {
+        color: $white-ter;
+        background-color: $grey;
+      }
+    }
+  }
+
+  & code {
+    background-color: $grey-dark;
+  }
+
+  & .dark-link {
+    color: lighten(nth(map-get($colors, "primary"), 1), 15%);
+    font-weight: 600;
+
+    &:hover {
+      color: lighten(nth(map-get($colors, "primary"), 1), 30%);
+    }
+  }
+
+  & .bot-description {
+    color: $grey-lighter;
+  }
+
+  & .checkbox {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      color: $grey-lighter;
+    }
+  }
+}
+
+
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
