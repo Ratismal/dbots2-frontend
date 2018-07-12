@@ -25,16 +25,16 @@
     "@nuxtjs/proxy": "^1.2.4",
     "cookieparser": "^0.1.0",
     "js-cookie": "^2.2.0",
-    "nuxt": "^1.0.0",
-    "nuxt-buefy": "0.0.4"
+    "node-sass": "^4.9.0",
+    "nuxt": "^1.4.1",
+    "nuxt-buefy": "^0.1.0",
+    "sass-loader": "^7.0.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.2"
+    "babel-eslint": "^8.2.5",
+    "eslint": "^5.1.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-vue": "^4.5.0"
   }
 }
