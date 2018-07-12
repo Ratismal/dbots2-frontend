@@ -5,7 +5,7 @@
         <h1 class="title">
           Edit a Bot
         </h1>
-        <bot-form :edit="true" :old-bot="bot" :unverified="true"/>
+        <bot-form :old-bot="bot" edit unverified />
       </div>
     </section>
   </div>
@@ -21,6 +21,7 @@ export default {
   validate(ctx) {
     return /^\d{17,21}$/.test(ctx.params.id);
   },
+  middleware: ["authenticated", "betaOnly"],
   asyncData(ctx) {
     return ctx.$axios.$get(`/unverified_bots/${ctx.params.id}`, {
       params: {
@@ -28,9 +29,10 @@ export default {
         owners: true,
       }
     }).then((bot) => {
-      let owners = "";
-
-      return { id: ctx.params.id, bot };
+      return {
+        id: ctx.params.id,
+        bot: bot
+      };
     }).catch((err) => {
       console.error(err, err.response);
       if(err && err.response && err.response.status) {
@@ -44,12 +46,6 @@ export default {
         message: err.message || "Internal error"
       });
     });
-  },
-  middleware: ["authenticated", "betaOnly"],
-  computed: {
-    computedBot() {
-      return Object.assign({}, this.bot, {owners: this.owners});
-    }
   }
 }
 </script>
