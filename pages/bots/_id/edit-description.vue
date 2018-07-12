@@ -28,13 +28,14 @@ export default {
   asyncData(ctx) {
     return ctx.$axios.$get(`/bots/${ctx.params.id}`, {
       params: {
+        description: true,
         modified_description: true,
         owners: true
       }
     }).then((bot) => {
       return {
         bot: bot,
-        description: bot.description
+        description: bot.modified_description || bot.description
       };
     }).catch((err) => {
       console.error(err, err.response);
