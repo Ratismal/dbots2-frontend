@@ -3,8 +3,7 @@
     <form>
       <b-field grouped>
         <b-field :type="isInvalidClientID ? 'is-danger' : ''" :message="isInvalidClientID" label="Client ID" expanded>
-          <b-input v-if="edit" v-model="clientID" minlength="18" disabled required @input="validateClientID" @blur="validateClientID"/>
-          <b-input v-else v-model="clientID" minlength="18" required @input="validateClientID" @blur="validateClientID"/>
+          <b-input v-model="clientID" :disabled="edit" minlength="18" required @input="validateClientID" @blur="validateClientID"/>
         </b-field>
         <b-field :type="isInvalidLibrary ? 'is-danger' : ''" :message="isInvalidLibrary" label="Library">
           <b-select v-model="library" placeholder="Select a library:" required @input="validateLibrary" @blur="validateLibrary">
@@ -46,33 +45,6 @@
       <b-field :type="isInvalidTagline ? 'is-danger' : ''" :message="isInvalidTagline" label="Tagline">
         <b-input v-model="tagline" minlength="8" maxlength="200" placeholder="A short description of your bot" required @blur="validateTagline" @input="validateTagline"/>
       </b-field>
-      <div class="columns">
-        <div class="column">
-          <b-field :type="isInvalidDescription ? 'is-danger' : ''" :message="isInvalidDescription" label="Description">
-            <b-input v-model="description" type="textarea" minlength="32" maxlength="16000" placeholder="Now describe the bot! Go into detail!" required @blur="validateDescription" @input="validateDescription"/>
-          </b-field>
-          <div class="buttons">
-            <b-checkbox v-model="previewColumnActive" class="button is-text">Preview</b-checkbox>
-            <a v-if="description && tagline && owners.length" class="button is-text" href="#" @click="previewModalActive = true">Full Preview</a>
-            <a v-else class="button is-text" href="#" disabled @click.prevent>Full Preview</a>
-            <b-modal :active.sync="previewModalActive" :has-modal-card="true" class="preview-modal" >
-              <div class="modal-card description-preview">
-                <header class="modal-card-head">
-                  <p class="modal-card-title">Preview</p>
-                </header>
-                <section class="modal-card-body">
-                  <nav-bar />
-                  <bot-view :bot="bot" :is-preview="true"/>
-                </section>
-              </div>
-            </b-modal>
-          </div>
-        </div>
-        <div v-if="previewColumnActive" class="column">
-          <label class="label">Preview</label>
-          <div class="bot-description" v-html="description"/>
-        </div>
-      </div>
       <b-notification :active.sync="notifyError" type="is-danger" v-html="notifyErrorMessage"/>
       <b-field grouped>
         <p class="control">
@@ -83,6 +55,9 @@
         <p v-if="!edit" class="control">
           <button v-if="saveLoading" disabled class="button is-loading">Save Draft</button>
           <button v-else class="button" @click.prevent="saveData">Save Draft</button>
+        </p>
+        <p v-if="edit" class="control">
+          <router-link :to="endpoint + '/edit-description'" class="button">Edit Description</router-link>
         </p>
       </b-field>
     </form>
@@ -149,7 +124,7 @@ export default {
       type: Boolean,
       default: false
     },
-    oldBot: { // The ID of the bot to edit (required for edits)
+    bot: {
       type: Object,
       default: () => {
         return {};
@@ -178,7 +153,7 @@ export default {
       owners: [currentUser],
       categories: [],
       tagline: "",
-      description: "",
+      flags: 0,
 
       isInvalidClientID: "",
       isInvalidLibrary: "",
@@ -187,7 +162,6 @@ export default {
       isInvalidOwners: "",
       isInvalidCategories: "You must have at least one category",
       isInvalidTagline: "",
-      isInvalidDescription: "",
 
       searchOwnersDebouncer: createDebouncer(),
       searchOwnersLoading: false,
@@ -237,27 +211,14 @@ export default {
       return inviteURL;
     },
     isInvalidAny() {
-      return !!(this.isInvalidClientID || this.isInvalidLibrary || this.isInvalidWebsite || this.isInvalidPrefixes || this.isInvalidOwners || this.isInvalidCategories || this.isInvalidTagline || this.isInvalidDescription || this.isInvalidPermissions || this.isInvalidInviteScopes || this.isInvalidRedirectURI);
-    },
-    sanitizedDescription() {
-      // TODO: actually implement
-      return this.description;
-    },
-    bot() {
-      return {
-        id: "0",
-        name: "Preview",
-        website: this.website,
-        tagline: this.tagline,
-        description: this.sanitizedDescription,
-        owners: this.owners.map(o => o.tag).join(", ")
-      };
+      return !!(this.isInvalidClientID || this.isInvalidLibrary || this.isInvalidWebsite || this.isInvalidPrefixes || this.isInvalidOwners || this.isInvalidCategories || this.isInvalidTagline || this.isInvalidPermissions || this.isInvalidInviteScopes || this.isInvalidRedirectURI);
     },
     endpoint() {
-      let endpoint = (!this.edit || this.unverified) ? "/unverified_bots" : "/bots"
-      if (this.edit)
-        endpoint += "/" + this.clientID
-      return endpoint
+      let endpoint = (!this.edit || this.unverified) ? "/unverified_bots" : "/bots";
+      if(this.edit) {
+        endpoint += "/" + this.clientID;
+      }
+      return endpoint;
     }
   },
   mounted() {
@@ -273,7 +234,7 @@ export default {
         window.localStorage.removeItem("botFormDraft");
       }
     } else {
-      this.populateData(this.oldBot);
+      this.populateData(this.bot);
     }
   },
   methods: {
@@ -294,10 +255,10 @@ export default {
         this.prefixes = data.prefixes;
       }
       if(data.owners) {
-        // populate the tag property if undefined (edits)
         this.owners = data.owners.map((owner) => {
-          if (!owner.tag)
+          if(!owner.tag) {
             owner.tag = `${owner.username}#${owner.discriminator}`;
+          }
           return owner;
         });
       }
@@ -307,8 +268,8 @@ export default {
       if(data.tagline) {
         this.tagline = data.tagline;
       }
-      if(data.description) {
-        this.description = data.description;
+      if(data.flags) {
+        this.flags = data.flags & 0xFF;
       }
       if(data.invitePermissions) {
         this.invitePermissions = data.invitePermissions;
@@ -324,6 +285,7 @@ export default {
       }
       this.validateAll();
     },
+
     validateClientID() {
       if(!(/^\d{18,21}$/.test(this.clientID))) {
         return this.isInvalidClientID = "Invalid client ID";
@@ -400,16 +362,6 @@ export default {
 
       return this.isInvalidTagline = "";
     },
-    validateDescription() {
-      if(this.description.length < 32) {
-        return this.isInvalidDescription = "Too short";
-      }
-      if(this.description.length > 16000) {
-        return this.isInvalidDescription = "Too long";
-      }
-
-      return this.isInvalidDescription = "";
-    },
     validatePermissions() {
       if(isNaN(this.invitePermissions)) {
         return this.isInvalidPermissions = "Invalid permissions number";
@@ -455,7 +407,6 @@ export default {
       res |= !!this.validateOwners();
       res |= !!this.validateCategories();
       res |= !!this.validateTagline();
-      res |= !!this.validateDescription();
       res |= !!this.validatePermissions();
       res |= !!this.validateInviteScopes();
       res |= !!this.validateRedirectURI();
@@ -538,7 +489,7 @@ export default {
           owners: this.owners,
           categories: this.categories,
           tagline: this.tagline,
-          description: this.description,
+          flags: this.flags,
           invitePermissions: this.invitePermissions,
           inviteCodeGrant: this.inviteCodeGrant,
           inviteScopes: this.inviteScopes,
@@ -559,14 +510,15 @@ export default {
       }
 
       this.submitLoading = true;
-      let flags = 0;
       if(this.inviteCodeGrant) {
-        flags |= 0b1; // Kenobi
+        this.flags |= 0b1; // Kenobi
+      } else {
+        this.flags &= ~0b1;
       }
       this.$axios[this.edit ? "$patch" : "$post"](this.endpoint, {
         id: this.clientID,
         categories: this.categories,
-        flags: flags,
+        flags: this.flags,
         library: this.library,
         owner_ids: this.owners.map((owner) => owner.id),
         permissions: this.invitePermissions,
@@ -574,14 +526,16 @@ export default {
         redirect_uri: this.inviteRedirectURI,
         scopes: this.inviteScopes,
         tagline: this.tagline,
-        website: this.website || undefined,
-
-        description: this.description // Separate object, but ride-along
+        website: this.website || undefined
       }).then(() => {
         this.submitLoading = false;
         this.submitted = true;
 
-        this.$router.push("/profile");
+        if(this.edit) {
+          this.$router.push(this.endpoint);
+        } else {
+          this.$router.push(`/unverified_bots/${this.clientID}/edit-description`);
+        }
       }).catch((err) => {
         console.error(err);
         this.submitLoading = false;
@@ -612,19 +566,5 @@ export default {
 <style>
 .long-link {
   word-wrap: break-word;
-}
-.description-preview {
-  width: 100%;
-  position: relative;
-}
-.preview-modal > .animation-content {
-  width: 100%
-}
-.bot-container {
-  padding-top: 1em;
-  width: 100%;
-}
-.bot-owners {
-  margin-left: .5em;
 }
 </style>

@@ -3,9 +3,9 @@
     <section class="section">
       <div class="container">
         <h1 class="title">
-          Edit a Bot
+          Edit {{ bot.name }}
         </h1>
-        <bot-form :old-bot="bot" edit unverified />
+        <bot-form :bot="bot" edit unverified/>
       </div>
     </section>
   </div>
@@ -25,8 +25,7 @@ export default {
   asyncData(ctx) {
     return ctx.$axios.$get(`/unverified_bots/${ctx.params.id}`, {
       params: {
-        description: true,
-        owners: true,
+        owners: true
       }
     }).then((bot) => {
       return {

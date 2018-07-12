@@ -5,32 +5,33 @@
         <h1 class="title">
           Edit {{ bot.name }}
         </h1>
-        <bot-form :bot="bot" edit/>
+        <bot-description-form :bot="bot" :description="description" unverified/>
       </div>
     </section>
   </div>
 </template>
 
 <script>
-import BotForm from "~/components/BotForm.vue";
+import BotDescriptionForm from "~/components/BotDescriptionForm.vue";
 
 export default {
   components: {
-    BotForm
+    BotDescriptionForm
   },
   validate(ctx) {
     return /^\d{17,21}$/.test(ctx.params.id);
   },
   middleware: ["authenticated", "betaOnly"],
   asyncData(ctx) {
-    return ctx.$axios.$get(`/bots/${ctx.params.id}`, {
+    return ctx.$axios.$get(`/unverified_bots/${ctx.params.id}`, {
       params: {
+        description: true,
         owners: true
       }
     }).then((bot) => {
       return {
-        id: ctx.params.id,
-        bot: bot
+        bot: bot,
+        description: bot.description
       };
     }).catch((err) => {
       console.error(err, err.response);

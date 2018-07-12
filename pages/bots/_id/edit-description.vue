@@ -5,18 +5,21 @@
         <h1 class="title">
           Edit {{ bot.name }}
         </h1>
-        <bot-form :bot="bot" edit/>
+        <b-notification type="is-warning">
+          The edited description will not show up on your bot page until it is manually approved by a mod.
+        </b-notification>
+        <bot-description-form :bot="bot" :description="description"/>
       </div>
     </section>
   </div>
 </template>
 
 <script>
-import BotForm from "~/components/BotForm.vue";
+import BotDescriptionForm from "~/components/BotDescriptionForm.vue";
 
 export default {
   components: {
-    BotForm
+    BotDescriptionForm
   },
   validate(ctx) {
     return /^\d{17,21}$/.test(ctx.params.id);
@@ -25,12 +28,13 @@ export default {
   asyncData(ctx) {
     return ctx.$axios.$get(`/bots/${ctx.params.id}`, {
       params: {
+        modified_description: true,
         owners: true
       }
     }).then((bot) => {
       return {
-        id: ctx.params.id,
-        bot: bot
+        bot: bot,
+        description: bot.description
       };
     }).catch((err) => {
       console.error(err, err.response);
