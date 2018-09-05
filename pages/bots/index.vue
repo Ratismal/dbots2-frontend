@@ -8,7 +8,7 @@
         <h2 class="subtitle">
           Find the perfect bot for your server
         </h2>
-        <bot-list-search-bar path="/bots"/>
+        <bot-list-search-bar ref="searchBar" path="/bots"/>
       </div>
       <hr>
       <div class="container">
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import BotListItemGrid from "~/components/BotListItemGrid.vue"
-import BotListSearchBar from "~/components/BotListSearchBar.vue"
+import BotListItemGrid from "~/components/BotListItemGrid.vue";
+import BotListSearchBar from "~/components/BotListSearchBar.vue";
 
 export default {
   components: {
@@ -30,39 +30,51 @@ export default {
   head() {
     return {
       title: "Discover Bots | Discord Bots"
-    }
+    };
   },
   middleware: "betaOnly",
+  // beforeRouteUpdate(to, from, next) {
+  //   if (this.$route.query.a) {
+  //     this.$refs.toggleAdvancedFilters();
+  //   }
+  //   next();
+  // },
   data() {
     return {
       bots: []
     };
   },
   asyncData(ctx) {
-    return ctx.$axios.$get("/bots", {
-      params: {
-        limit: ctx.query.limit,
-        page: ctx.query.page,
-        q: ctx.query.q,
-        sort: ctx.query.sort
-      }
-    }).then((bots) => {
-      return {
-        bots: bots
-      };
-    }).catch((err) => {
-      if(err && err.response && err.response.status) {
+    return ctx.$axios
+      .$get("/bots", {
+        params: {
+          limit: ctx.query.limit,
+          page: ctx.query.page,
+          q: ctx.query.q,
+          sort: ctx.query.sort
+        }
+      })
+      .then(bots => {
+        return {
+          bots: bots
+        };
+      })
+      .catch(err => {
+        if (err && err.response && err.response.status) {
+          return ctx.error({
+            statusCode: err.response.status,
+            message:
+              (err.response.data && err.response.data.message) ||
+              err.message ||
+              "Internal error"
+          });
+        }
         return ctx.error({
-          statusCode: err.response.status,
-          message: err.response.data && err.response.data.message || err.message || "Internal error"
+          statusCode: 500,
+          message: err.message || "Internal error"
         });
-      }
-      return ctx.error({
-        statusCode: 500,
-        message: err.message || "Internal error"
       });
-    });
   },
   watchQuery: ["limit", "page", "q", "sort"]
-}
+};
 </script>
