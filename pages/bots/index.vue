@@ -33,12 +33,6 @@ export default {
     };
   },
   middleware: "betaOnly",
-  // beforeRouteUpdate(to, from, next) {
-  //   if (this.$route.query.a) {
-  //     this.$refs.toggleAdvancedFilters();
-  //   }
-  //   next();
-  // },
   data() {
     return {
       bots: []
