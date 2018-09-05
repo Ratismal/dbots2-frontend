@@ -11,9 +11,11 @@
         <bot-list-search-bar ref="searchBar" path="/bots"/>
       </div>
       <hr>
+      <bot-list-paginator/>
       <div class="container">
         <bot-list-item-grid :bots="bots"/>
       </div>
+      <bot-list-paginator/>
     </section>
   </div>
 </template>
@@ -21,11 +23,13 @@
 <script>
 import BotListItemGrid from "~/components/BotListItemGrid.vue";
 import BotListSearchBar from "~/components/BotListSearchBar.vue";
+import BotListPaginator from "~/components/BotListPaginator.vue";
 
 export default {
   components: {
     BotListItemGrid,
-    BotListSearchBar
+    BotListSearchBar,
+    BotListPaginator
   },
   head() {
     return {
@@ -45,7 +49,8 @@ export default {
           limit: ctx.query.limit,
           page: ctx.query.page,
           q: ctx.query.q,
-          sort: ctx.query.sort
+          sort: ctx.query.sort,
+          category: ctx.query.category
         }
       })
       .then(bots => {
@@ -69,6 +74,6 @@ export default {
         });
       });
   },
-  watchQuery: ["limit", "page", "q", "sort"]
+  watchQuery: ["limit", "page", "q", "sort", "category"]
 };
 </script>

@@ -10,21 +10,20 @@
       <a @click.prevent="toggleAdvancedFilters" >Advanced Filters</a>  
     </div>  
     <section v-if="$route.path === path && toggled" class="advancedFilters">
-      <b-field label="Categories" horizontal expanded>
-        <b-taginput v-model="categories" :data="categoriesFiltered" autocomplete open-on-focus @input="processSearchTyping" @typing="filterCategories"/>
-      </b-field>
-
-      <b-field label="Sorting" horizontal>
-        <b-field>
-          <b-select v-model="sortType" placeholder="Sorting Type" expanded @input="processSearchTyping">
-            <option v-for="sortingType in sortingTypes" :key="sortingType" :value="sortingType">{{ sortingType }}</option> 
-          </b-select>
-          <b-radio-button v-model="sortDirection" native-value="-" expanded @input="processSearchTyping">Ascending</b-radio-button>
-          <b-radio-button v-model="sortDirection" native-value="+" expanded @input="processSearchTyping">Descending</b-radio-button>
+      <b-field grouped>
+        <b-field label="Categories" expanded>
+          <b-taginput v-model="categories" :data="categoriesFiltered" autocomplete open-on-focus @input="processSearchTyping" @typing="filterCategories"/>
         </b-field>
-      </b-field>
-      <b-field horizontal>
-        <b-switch v-model="featuredTerm" true-value="true" false-value="false" @input="processSearchTyping">Featured Bots Only</b-switch>
+
+        <b-field label="Sorting" expanded>
+          <b-field>
+            <b-select v-model="sortType" placeholder="Sorting Type" expanded @input="processSearchTyping">
+              <option v-for="sortingType in sortingTypes" :key="sortingType" :value="sortingType">{{ sortingType }}</option> 
+            </b-select>
+            <b-radio-button v-model="sortDirection" native-value="-" expanded @input="processSearchTyping">Ascending</b-radio-button>
+            <b-radio-button v-model="sortDirection" native-value="+" expanded @input="processSearchTyping">Descending</b-radio-button>
+          </b-field>
+        </b-field>
       </b-field>
     </section>
   </section>
@@ -70,10 +69,11 @@ export default {
       searchTerm: this.$route.query.q || "",
       sortDirection: this.$route.query.sort ? this.$route.query.sort[0] : "-",
       sortType: this.$route.query.sort ? this.$route.query.sort.slice(1) : "",
-      featuredTerm: this.$route.query.featured === "true",
       toggled: this.$route.query.a === true,
 
-      categories: [],
+      categories: this.$route.query.category
+        ? this.$route.query.category.split(",")
+        : [],
       categoriesFiltered: VALID_CATEGORIES.map(category => category),
       sortingTypes: VALID_SORTING_TYPES.map(sortingType => sortingType)
     };
@@ -93,8 +93,9 @@ export default {
         q: this.searchTerm || undefined,
         sort: this.sortTerm || undefined,
         a: this.toggled || undefined,
-        featured: this.featuredTerm || undefined,
-        category: this.categoryTerm || undefined
+        category: this.categoryTerm || undefined,
+        limit: 24,
+        page: this.$route.query.page
       };
     }
   },
@@ -110,7 +111,6 @@ export default {
       this.searchDebouncer(() => this.processSearch(), 500);
     },
     processSearch() {
-      console.log(this.query);
       let data = {
         path: this.path,
         query: this.query
