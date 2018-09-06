@@ -37,7 +37,16 @@ export default {
   methods: {
     gotoPage(page) {
       if (page < 0) page = 0;
-      let route = this.$route;
+      let route = {
+        path: this.$route.path,
+        query: {
+          q: this.$route.query.q,
+          category: this.$route.query.category,
+          limit: this.$route.query.limit,
+          page: this.$route.query.page,
+          sort: this.$route.query.sort
+        }
+      };
       route.query.page = page;
       console.log(route);
       this.$router.push(route);
