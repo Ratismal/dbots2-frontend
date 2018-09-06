@@ -1,22 +1,7 @@
 <template>
   <section>
     <b-field class="paginator" position="is-centered">
-      <div class="control">
-        <button class="button" @click="gotoPage(0)">First</button>
-      </div>
-      <div class="control">
-        <button class="button" @click="gotoPage(page - 1)">Prev</button>
-      </div>
-      <div class="control">
-        <button class="button is-static">Page {{ pageLabel }}</button>
-      </div>
-      <div class="control">
-        <button class="button" @click="gotoPage(page + 1)">Next</button>
-      </div>
-      <!-- API doesn't return the max number of bots, can't calculate last page? -->
-      <div class="control">
-        <button disabled class="button">Last</button>
-      </div>
+      <b-pagination :total="total" :current.sync="page" :per-page="perPage"/>
     </b-field>
   </section>
 </template>
@@ -24,14 +9,22 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      total: 200
+    };
   },
   computed: {
-    pageLabel() {
-      return (this.page + 1).toString();
+    perPage() {
+      return parseInt(this.$route.query.limit) || 24;
     },
-    page() {
-      return parseInt(this.$route.query.page) || 0;
+    page: {
+      get() {
+        let page = parseInt(this.$route.query.page);
+        return isNaN(page) ? 1 : page;
+      },
+      set(value) {
+        this.gotoPage(value);
+      }
     }
   },
   methods: {
@@ -43,12 +36,10 @@ export default {
           q: this.$route.query.q,
           category: this.$route.query.category,
           limit: this.$route.query.limit,
-          page: this.$route.query.page,
+          page: page,
           sort: this.$route.query.sort
         }
       };
-      route.query.page = page;
-      console.log(route);
       this.$router.push(route);
     }
   }
@@ -57,6 +48,7 @@ export default {
 
 <style>
 .paginator {
-  margin: 0.75rem 0;
+  margin: 0.75rem auto;
+  max-width: 400px;
 }
 </style>

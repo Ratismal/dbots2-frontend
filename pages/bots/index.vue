@@ -43,11 +43,14 @@ export default {
     };
   },
   asyncData(ctx) {
+    let page = parseInt(ctx.query.page);
+    if (isNaN(page)) page = 0;
+    else page = page - 1;
     return ctx.$axios
       .$get("/bots", {
         params: {
           limit: ctx.query.limit,
-          page: ctx.query.page,
+          page: page,
           q: ctx.query.q,
           sort: ctx.query.sort,
           category: ctx.query.category
