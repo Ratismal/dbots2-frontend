@@ -11,8 +11,17 @@
     </div>  
     <section v-if="$route.path === path && toggled" class="advancedFilters">
       <b-field grouped>
-        <b-field label="Categories" expanded>
+        <!-- For tag searching -->
+        <!-- <b-field label="Categories" expanded>
           <b-taginput v-model="categories" :data="categoriesFiltered" autocomplete open-on-focus @input="processSearchTyping" @typing="filterCategories"/>
+        </b-field> -->
+        <!-- For single category searching -->
+        <b-field label="Sorting" expanded>
+          <b-field>
+            <b-select v-model="categories" placeholder="Sorting Type" expanded @input="processSearchTyping">
+              <option v-for="category in categoriesFiltered" :key="category" :value="category">{{ category }}</option> 
+            </b-select>
+          </b-field>
         </b-field>
 
         <b-field label="Sorting" expanded>
@@ -86,7 +95,9 @@ export default {
       return this.sortDirection + this.sortType;
     },
     categoryTerm() {
-      return this.categories.join(",");
+      return Array.isArray(this.categories)
+        ? this.categories.join(",")
+        : this.categories;
     },
     query() {
       return {
