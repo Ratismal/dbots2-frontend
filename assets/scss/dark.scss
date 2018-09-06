@@ -155,6 +155,12 @@ select > option,
       color: $grey;
     }
 
+    &.is-static {
+      background-color: $grey-darker;
+      color: $grey-lighter;
+      border-color: transparent;
+    }
+
     &.is-text {
       color: $white-ter;
 
