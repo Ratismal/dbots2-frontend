@@ -16,7 +16,7 @@
           <b-taginput v-model="categories" :data="categoriesFiltered" autocomplete open-on-focus @input="processSearchTyping" @typing="filterCategories"/>
         </b-field> -->
         <!-- For single category searching -->
-        <b-field label="Sorting" expanded>
+        <b-field label="Category" expanded>
           <b-field>
             <b-select v-model="categories" placeholder="Sorting Type" expanded @input="processSearchTyping">
               <option v-for="category in categoriesFiltered" :key="category" :value="category">{{ category }}</option> 
