@@ -261,42 +261,41 @@ select > option,
       color: $grey-lighter;
     }
   }
-}
 
-.pagination {
-  .pagination-previous, .pagination-next, .pagination-link {
-    background-color: $grey-darker;
-    border: transparent;
-    color: $grey-lighter;
-
-    &[disabled="disabled"] {
-      display: none;
-    }
-
-    &:hover {
-      color: $grey-light;
-      
-      .icon .mdi::before {
+  & .pagination {
+    .pagination-previous, .pagination-next, .pagination-link {
+      background-color: $grey-darker;
+      border: transparent;
+      color: $grey-lighter;
+  
+      &[disabled="disabled"] {
+        display: none;
+      }
+  
+      &:hover {
         color: $grey-light;
-
+        
+        .icon .mdi::before {
+          color: $grey-light;
+  
+        }
       }
-    }
-
-    .icon {
-      .mdi-chevron-left::before {
-        content: '<';
-      }
-      .mdi-chevron-right::before {
-        content: '>';
-      }
-    
-      .mdi::before {
-        color: $grey-lighter;
+  
+      .icon {
+        .mdi-chevron-left::before {
+          content: '<';
+        }
+        .mdi-chevron-right::before {
+          content: '>';
+        }
+      
+        .mdi::before {
+          color: $grey-lighter;
+        }
       }
     }
   }
 }
-
 
 
 @import "~bulma";
