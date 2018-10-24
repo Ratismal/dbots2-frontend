@@ -11,11 +11,11 @@
         <bot-list-search-bar ref="searchBar" path="/bots"/>
       </div>
       <hr>
-      <bot-list-paginator/>
+      <bot-list-paginator :total="total"/>
       <div class="container">
         <bot-list-item-grid :bots="bots"/>
       </div>
-      <bot-list-paginator/>
+      <bot-list-paginator :total="total"/>
     </section>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
     if (isNaN(page)) page = 0;
     else page = page - 1;
     return ctx.$axios
-      .$get("/bots", {
+      .get("/bots", {
         params: {
           limit: ctx.query.limit,
           page: page,
@@ -56,9 +56,10 @@ export default {
           category: ctx.query.category
         }
       })
-      .then(bots => {
+      .then(res => {
         return {
-          bots: bots
+          bots: res.data,
+          total: Number(res.headers["x-total-count"])
         };
       })
       .catch(err => {

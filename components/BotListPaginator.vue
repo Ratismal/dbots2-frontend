@@ -8,10 +8,11 @@
 
 <script>
 export default {
-  data() {
-    return {
-      total: 200
-    };
+  props: {
+    total: {
+      type: Number,
+      required: true
+    }
   },
   computed: {
     perPage() {
@@ -50,5 +51,12 @@ export default {
 .paginator {
   margin: 0.75rem auto;
   max-width: 400px;
+}
+
+.icon .mdi-chevron-left::before {
+  content: "<";
+}
+.icon .mdi-chevron-right::before {
+  content: ">";
 }
 </style>
