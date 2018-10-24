@@ -1,7 +1,13 @@
 @import "~bulma/sass/utilities/_all";
 
-$purple: #7957D5;
-$primary: $purple;
+$blurple: #7289DA;
+$greyple: #99AAB5;
+$darkple: #2C2F33;
+$darkple-lighter: #414347;
+$darkple-light: #56585B;
+$blackple: #23272A;
+
+$primary: $blurple;
 $primary-invert: findColorInvert($primary);
 
 $colors: (
@@ -16,6 +22,9 @@ $colors: (
   "danger": ($danger, $danger-invert)
 );
 
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
 @mixin fadeTransition($props) {
   $full: "";
   $time: 0.2s;
@@ -26,6 +35,230 @@ $colors: (
   }
 
   transition: #{str-slice($full, 0, -2)};
+}
+
+.dark {
+  background-color: $darkple;
+
+  & .title {
+    color: $white-ter;
+  }
+
+  & .subtitle {
+    color: $grey-lighter;
+  }
+
+  & hr {
+    background-color: $greyple;
+  }
+
+  & p {
+    color: $white-ter;
+  }
+
+  & .input,
+  & .textarea,
+  & .select select {
+    background-color: $darkple-light;
+    color: $grey-lighter;
+    border-color: transparent;
+
+    &:hover {
+      border-color: transparent;
+    }
+
+    &:focus {
+      border-color: $blurple;
+    }
+
+    @each $key, $val in $colors {
+      $true-val: nth($val, 1);
+
+      &.is-#{$key},
+      &.is-#{$key}:hover {
+        border-color: $true-val;
+      }
+    }
+
+    &:disabled {
+      background-color: $blackple;
+      border-color: transparent !important;
+    }
+  }
+
+  & .input::placeholder,
+  & .textarea::placeholder {
+      color: rgba($grey-lighter, 0.3);
+  }
+
+  & .select {
+    &:not(.is-multiple)::after,
+    &:hover::after {
+      border-color: $white-ter;
+    }
+    & select > option {
+      color: $white-ter;
+    }
+  }
+
+  & .tag {
+    background-color: $darkple;
+    color: $grey-lighter;
+  }
+
+  & .taginput .tag {
+    background-color: $darkple;
+  }
+
+  & .label {
+    color: $grey-lighter;
+  }
+
+  & .button {
+    background-color: $darkple-lighter;
+    color: $grey-lighter;
+    border-color: transparent;
+
+    &:hover {
+      border-color: $blackple;
+      color: $grey-light;
+      border-color: transparent;
+    }
+
+    &:active,
+    &:focus {
+      color: $grey;
+    }
+
+    &.is-text {
+      color: $white-ter;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: $darkple;
+        color: $white;
+      }
+    }
+
+    &.is-danger {
+      background-color: $danger;
+    }
+    &.is-warning {
+      background-color: $warning;
+    }
+    &.is-success {
+      background-color: $success;
+    }
+    &.is-info {
+      background-color: $info;
+    }
+    &.is-primary {
+      background-color: $primary;
+    }
+  }
+
+  & .card {
+    background-color: $darkple-lighter;
+    color: $text-invert;
+
+    & .card-footer,
+    & .card-footer-item:not(:last-child) {
+      border-color: $blackple;
+    }
+
+    & a.card-footer-item {
+      color: $white !important;
+      text-decoration: underline;
+    }
+  }
+
+  & .modal-card {
+    & .modal-card-head {
+      background-color: $blackple;
+      border-bottom-color: $grey-darker;
+    }
+
+    & .modal-card-body {
+      background-color: $darkple;
+    }
+
+    & .modal-card-foot {
+      background-color: $blackple;
+      border-top-color: $grey-darker;
+    }
+  }
+
+  & .box {
+    background-color: $blackple;
+  }
+
+  & .navbar {
+    & .navbar-dropdown {
+      background-color: $darkple;
+      border-color: $blackple;
+    }
+
+    & .navbar-item, & .navbar-link {
+      color: $grey-lighter;
+
+      &:hover {
+        color: $white-ter;
+        background-color: $darkple-light;
+      }
+    }
+  }
+
+  .dropdown-content {
+    background-color: $darkple;
+
+    & .dropdown-item {
+      color: $grey-lighter;
+
+      &:hover,
+      &.is-hovered {
+        color: $white-ter;
+        background-color: $darkple-light;
+      }
+    }
+  }
+
+  & code {
+    background-color: $darkple-light;
+  }
+
+  & .dark-link {
+    color: lighten(nth(map-get($colors, "primary"), 1), 15%);
+    font-weight: 600;
+
+    &:hover {
+      color: lighten(nth(map-get($colors, "primary"), 1), 30%);
+    }
+  }
+
+  & .bot-description {
+    color: $grey-lighter;
+  }
+
+  & .checkbox {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      color: $grey-lighter;
+    }
+  }
+
+  & section.hero.is-primary {
+    background-color: $darkple;
+  }
+}
+
+@media screen and (max-width: 1087px) {
+  .navbar-menu {
+    background-color: $darkple;
+    color: $white-ter;
+  }
 }
 html,
 hr,
@@ -61,202 +294,3 @@ select > option,
   // @include fadeTransition(color);
   // @include fadeTransition(border-color);
 }
-
-.dark {
-  background-color: $black-bis;
-
-  & .title {
-    color: $white-ter;
-  }
-
-  & .subtitle {
-    color: $grey-lighter;
-  }
-
-  & hr {
-    background-color: $grey-light;
-  }
-
-  & p {
-    color: $white-ter;
-  }
-
-  & .input,
-  & .textarea,
-  & .select select {
-    background-color: $grey-darker;
-    color: $grey-lighter;
-    border-color: transparent;
-
-    &:hover {
-      border-color: transparent;
-    }
-
-    &:focus {
-      border-color: #3273DC;
-    }
-
-    @each $key, $val in $colors {
-      $true-val: nth($val, 1);
-
-      &.is-#{$key},
-      &.is-#{$key}:hover {
-        border-color: $true-val;
-      }
-    }
-
-    &:disabled {
-      background-color: $black-ter;
-      border-color: transparent !important;
-    }
-  }
-
-  & .input::placeholder,
-  & .textarea::placeholder {
-      color: rgba($grey-lighter, 0.3);
-  }
-
-  & .select {
-    &:not(.is-multiple)::after,
-    &:hover::after {
-      border-color: $white-ter;
-    }
-    & select > option {
-      color: $white-ter;
-    }
-  }
-
-  & .tag {
-    background-color: $grey-darker;
-    color: $grey-lighter;
-  }
-
-  & .taginput .tag {
-    background-color: $black-ter;
-  }
-
-  & .label {
-    color: $grey-lighter;
-  }
-
-  & .button {
-    background-color: $grey-darker;
-    color: $grey-lighter;
-    border-color: transparent;
-
-    &:hover {
-      border-color: $black;
-      color: $grey-light;
-      border-color: transparent;
-    }
-
-    &:active,
-    &:focus {
-      color: $grey;
-    }
-
-    &.is-text {
-      color: $white-ter;
-
-      &:hover,
-      &:focus,
-      &:active {
-        background-color: $grey-darker;
-        color: $white;
-      }
-    }
-  }
-
-  & .card {
-    background-color: $grey-darker;
-    color: $text-invert;
-
-    & .card-footer,
-    & .card-footer-item:not(:last-child) {
-      border-color: $grey-dark;
-    }
-
-    & a.card-footer-item {
-      color: $white !important;
-      text-decoration: underline;
-    }
-  }
-
-  & .modal-card {
-    & .modal-card-head {
-      background-color: $black-ter;
-      border-bottom-color: $grey-darker;
-    }
-
-    & .modal-card-body {
-      background-color: $black-bis;
-    }
-
-    & .modal-card-foot {
-      background-color: $black-ter;
-      border-top-color: $grey-darker;
-    }
-  }
-
-  & .box {
-    background-color: $black-ter;
-  }
-
-  & .navbar-dropdown {
-    background-color: $grey-darker;
-    border-color: $grey-darker;
-
-    & .navbar-item {
-      color: $grey-lighter;
-
-      &:hover {
-        color: $white-ter;
-        background-color: $grey;
-      }
-    }
-  }
-
-  .dropdown-content {
-    background-color: $grey-darker;
-
-    & .dropdown-item {
-      color: $grey-lighter;
-
-      &:hover,
-      &.is-hovered {
-        color: $white-ter;
-        background-color: $grey;
-      }
-    }
-  }
-
-  & code {
-    background-color: $grey-dark;
-  }
-
-  & .dark-link {
-    color: lighten(nth(map-get($colors, "primary"), 1), 15%);
-    font-weight: 600;
-
-    &:hover {
-      color: lighten(nth(map-get($colors, "primary"), 1), 30%);
-    }
-  }
-
-  & .bot-description {
-    color: $grey-lighter;
-  }
-
-  & .checkbox {
-    &,
-    &:hover,
-    &:active,
-    &:focus {
-      color: $grey-lighter;
-    }
-  }
-}
-
-
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
