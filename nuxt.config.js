@@ -52,6 +52,7 @@ module.exports = {
   ],
   plugins: [
     "~/plugins/auth",
+    "~/plugins/lazyImage",
     {src: "~/plugins/localStorage", ssr: false} // Used to store various parts of Vuex in localStorage.
   ],
   proxy: {

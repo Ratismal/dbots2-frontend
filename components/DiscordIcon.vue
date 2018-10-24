@@ -1,5 +1,5 @@
 <template>
-  <img :class="{'is-rounded': !square}" :src="avatarURL">
+  <img v-lazy-src="'//bots.discord.pw/images/defaulticon.jpg'" :class="{'is-rounded': !square}" :src="avatarURL">
 </template>
 
 <script>
