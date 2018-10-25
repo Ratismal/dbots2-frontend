@@ -36,20 +36,18 @@
       </div>
 
       <div class="navbar-end">
-        <div v-if="user" class="navbar-item">
-          <div class="navbar-item has-dropdown is-hoverable">
-            <router-link class="navbar-link button is-primary" to="/profile">
-              <span class="icon">
-                <discord-icon :object-id="user.id" :hash="user.avatar" size="64" type="avatar" />
-              </span>
-              <span>{{ user.username }}#{{ ("000" + user.discriminator).substring(user.discriminator.toString().length - 1) }}</span>
-            </router-link>
+        <div v-if="user" class="navbar-item has-dropdown is-hoverable">
+          <router-link class="navbar-link" to="/profile">
+            <span class="icon">
+              <discord-icon :object-id="user.id" :hash="user.avatar" size="64" type="avatar" />
+            </span>
+            <span>{{ user.username }}#{{ ("000" + user.discriminator).substring(user.discriminator.toString().length - 1) }}</span>
+          </router-link>
 
-            <div class="navbar-dropdown">
-              <router-link class="navbar-item" to="/profile">Profile</router-link>
-              <b-switch v-model="lightTheme" class="navbar-item" @click.native="setLightTheme">Light Theme</b-switch>
-              <router-link class="navbar-item" to="/logout">Logout</router-link>
-            </div>
+          <div class="navbar-dropdown">
+            <router-link class="navbar-item" to="/profile">Profile</router-link>
+            <b-switch v-model="lightTheme" class="navbar-item" @click.native="setLightTheme">Light Theme</b-switch>
+            <router-link class="navbar-item" to="/logout">Logout</router-link>
           </div>
         </div>
         <router-link v-else class="navbar-item" to="/login">

@@ -19,7 +19,10 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  loading: { color: "#3B8070" },
+  loading: {
+    color: "#99AAB5",
+    height: "4px"
+  },
   /*
   ** Build configuration
   */
@@ -52,6 +55,7 @@ module.exports = {
   ],
   plugins: [
     "~/plugins/auth",
+    "~/plugins/lazyImage",
     {src: "~/plugins/localStorage", ssr: false} // Used to store various parts of Vuex in localStorage.
   ],
   proxy: {

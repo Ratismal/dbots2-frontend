@@ -13,7 +13,7 @@
               </h2>
               <bot-list-search-bar path="/bots"/>
             </div>
-            <div class="column is-hidden-mobile">
+            <!-- <div class="column is-hidden-mobile">
               <div class="level">
                 <div class="level-item">
                   <div>
@@ -34,11 +34,12 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
     </section>
+    <hr>
     <section class="section">
       <div class="tile is-ancestor is-vertical">
         <div class="tile is-12">
@@ -69,7 +70,7 @@
           <div class="tile is-vertical">
             <div class="tile is-parent">
               <article class="tile is-child box notification is-info">
-                <p class="title">Find the perfect music bot</p>
+                <p class="title">Find the perfect {{ category0Name }} bot</p>
                 <div class="columns">
                   <div v-for="bot in category0Bots" :key="bot.id" class="column">
                     <bot-list-item :bot="bot" />
@@ -93,7 +94,7 @@
           <div class="tile">
             <div class="tile is-parent">
               <article class="tile is-child box">
-                <p class="title">Great moderation bots</p>
+                <p class="title">Great {{ category1Name }} bots</p>
                 <div class="columns">
                   <div v-for="bot in category1Bots" :key="bot.id" class="column">
                     <bot-list-item :bot="bot" />
@@ -103,7 +104,7 @@
             </div>
             <div class="tile is-parent is-4">
               <article class="tile is-child box">
-                <p class="title">The best anime bots</p>
+                <p class="title">The best {{ category2Name }} bots</p>
                 <div class="columns">
                   <div v-for="bot in category2Bots" :key="bot.id" class="column">
                     <bot-list-item :bot="bot" />
@@ -141,24 +142,27 @@ export default {
     };
   },
   asyncData(ctx) {
+    let category0Name = "music";
+    let category1Name = "moderation";
+    let category2Name = "anime";
     return Promise.all([
       ctx.$axios.$get("/bots", {
         params: {
-          category: "music",
+          category: category0Name,
           limit: 2,
           sort: "random"
         }
       }),
       ctx.$axios.$get("/bots", {
         params: {
-          category: "moderation",
+          category: category1Name,
           limit: 2,
           sort: "random"
         }
       }),
       ctx.$axios.$get("/bots", {
         params: {
-          category: "anime",
+          category: category2Name,
           limit: 1,
           sort: "random"
         }
@@ -178,8 +182,11 @@ export default {
       })
     ]).then((res) => {
       return {
+        category0Name: category0Name,
         category0Bots: res[0],
+        category1Name: category1Name,
         category1Bots: res[1],
+        category2Name: category2Name,
         category2Bots: res[2],
         newestBots: res[3],
         featuredBot0: res[4][0],
